@@ -25,9 +25,9 @@ namespace Org.Notification.Configuration
         public static IServiceCollection AddNotificationSettings(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IProducerRegistry, ProducerRegistry>();
-            serviceCollection.AddSingleton<IExecuteSubscription, ExecuteSubscription>();
             serviceCollection.AddSingleton<ICommandInvoker, CommandInvoker>();
 
+            serviceCollection.AddScoped<IExecuteSubscription, ExecuteSubscription>();
             serviceCollection.AddScoped<INotificationsPublisher, NotificationsPublisher>();
             serviceCollection.AddScoped<IEmailService, EmailService>();
             serviceCollection.AddScoped<ISmsService, SmsService>();
