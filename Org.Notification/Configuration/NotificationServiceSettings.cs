@@ -23,15 +23,16 @@ namespace Org.Notification.Configuration
             serviceCollection.AddTransient<INotificationPublisher, NotificationPublisher>();
             serviceCollection.AddScoped<IEmailService, EmailService>();
             serviceCollection.AddScoped<ISmsService, SmsService>();
+
             return serviceCollection;
         }
 
-        public static IServiceCollection WithSubscription(this IServiceCollection serviceCollection, CancellationToken cancellationToken)
+        public static IServiceCollection WithSubscription(this IServiceCollection serviceCollection)
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var worker = serviceProvider.GetRequiredService<IExecuteSubscription>();
 
-            worker.DoSubscription(cancellationToken);
+            worker.DoSubscription();
             return serviceCollection;
         }
 
@@ -39,6 +40,20 @@ namespace Org.Notification.Configuration
         {
             serviceCollection.AddSingleton<IMessageProducer, RabbitMqProducer>();
             serviceCollection.Configure<RabbitMqSettings>(configuration.GetSection(nameof(RabbitMqSettings)));
+            return serviceCollection;
+        }
+
+        public static IServiceCollection AddRedisCache(this IServiceCollection serviceCollection, ConfigurationManager configuration)
+        {
+            serviceCollection.Configure<RedisCacheSettings>(configuration.GetSection(nameof(RedisCacheSettings)));
+            
+            serviceCollection.AddStackExchangeRedisCache(options =>
+            {
+                var redisSettings = configuration.Get<RedisCacheSettings>();
+                options.Configuration = $"{redisSettings?.HostName ?? "localhost"}:{redisSettings?.Port ?? 6379}";
+                options.InstanceName = redisSettings?.InstanceName ?? string.Empty;
+            });
+
             return serviceCollection;
         }
 

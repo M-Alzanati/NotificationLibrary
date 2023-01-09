@@ -45,13 +45,13 @@ namespace Org.Notification.Publisher
             return this;
         }
 
-        public async Task<IEnumerable<Guid>> NotifyAsync(NotificationMessage notificationMessage)
+        public async Task<IEnumerable<Guid>> NotifyAsync(NotificationMessage notificationMessage, CancellationToken cancellationToken)
         {
             var list = new List<Guid>();
 
             foreach (var publisher in _publishers)
             {
-                list.AddRange(await publisher.NotifyAsync(notificationMessage));
+                list.AddRange(await publisher.NotifyAsync(notificationMessage, cancellationToken));
             }
 
             return list.Distinct();

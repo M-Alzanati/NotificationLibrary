@@ -2,6 +2,6 @@
 {
     public interface ICommandInvoker
     {
-        void Submit(ICommand command, object message, CancellationToken cancellationToken);
+        Task SubmitAsync(ICommand command, object message, CancellationToken cancellationToken);
     }
 }

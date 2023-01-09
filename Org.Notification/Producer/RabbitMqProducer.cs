@@ -1,13 +1,14 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using Org.Notification.Configuration;
 using Org.Notification.Producer.Interface;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace Org.Notification.Producer
 {
-    internal class RabbitMqProducer : IRabbitMqProducer
+    internal class RabbitMqProducer : IMessageProducer
     {
         private readonly RabbitMqSettings _rabbitMqSettings;
         private readonly IConnection? _connection;
@@ -20,10 +21,10 @@ namespace Org.Notification.Producer
             _connection = connectionFactory.CreateConnection();
         }
 
-        public string? CreateMessageProducerIfNotExist(string queueName)
+        public string? CreateMessageProducerIfNotExist(string collectionName)
         {
             _channel = _connection?.CreateModel();
-            var queueDeclareOk = _channel?.QueueDeclare(queueName,
+            var queueDeclareOk = _channel?.QueueDeclare(collectionName,
                 durable: false,
                 exclusive: false,
                 autoDelete: _rabbitMqSettings.AutoDeleteQueue,
@@ -32,18 +33,18 @@ namespace Org.Notification.Producer
             return queueDeclareOk?.QueueName;
         }
 
-        public async Task SendMessageAsync(string queueName, object message)
+        public async Task SendMessageAsync(string collectionName, object message, CancellationToken cancellationToken)
         {
-            CreateMessageProducerIfNotExist(queueName);
+            CreateMessageProducerIfNotExist(collectionName);
 
             var json = JsonSerializer.Serialize(message);
             var body = Encoding.UTF8.GetBytes(json);
-            await Task.Run(() => _channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body));
+            await Task.Run(() => _channel.BasicPublish(exchange: "", routingKey: collectionName, basicProperties: null, body: body), cancellationToken);
         }
 
-        public void DoSubscription(string queueName, Action<object?> action)
+        public void DoSubscription(string collectionName, Action<object?> action)
         {
-            CreateMessageProducerIfNotExist(queueName);
+            CreateMessageProducerIfNotExist(collectionName);
 
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) =>
@@ -53,7 +54,7 @@ namespace Org.Notification.Producer
                 action.Invoke(JsonSerializer.Deserialize(message, typeof(object)));
             };
 
-            _channel.BasicConsume(queue: queueName,
+            _channel.BasicConsume(queue: collectionName,
                 autoAck: _rabbitMqSettings.AutoAck,
                 consumer: consumer);
         }

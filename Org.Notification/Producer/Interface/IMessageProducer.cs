@@ -2,10 +2,10 @@
 {
     public interface IMessageProducer : IDisposable
     {
-        string? CreateMessageProducerIfNotExist(string queueName);
+        string? CreateMessageProducerIfNotExist(string collectionName);
 
-        Task SendMessageAsync(string queueName, object message);
+        Task SendMessageAsync(string collectionName, object message, CancellationToken cancellationToken);
 
-        void DoSubscription(string queueName, Action<object?> action);
+        void DoSubscription(string collectionName, Action<object?> action);
     }
 }

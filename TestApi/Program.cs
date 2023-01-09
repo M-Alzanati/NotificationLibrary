@@ -11,9 +11,10 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddNotificationSettings()
     .AddRabbitMqProducer(builder.Configuration)
+    .AddRedisCache(builder.Configuration)
     .AddSmsSubscription("sms")
     .AddEmailSubscription("email")
-    .WithSubscription(CancellationToken.None);
+    .WithSubscription();
 
 var app = builder.Build();
 

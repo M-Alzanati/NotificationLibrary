@@ -4,6 +4,6 @@ namespace Org.Notification.Publisher.Interface
 {
     public interface IPublisher
     {
-        Task<IList<Guid>> NotifyAsync(NotificationMessage message);
+        Task<IEnumerable<Guid>> NotifyAsync(NotificationMessage message, CancellationToken cancellationToken);
     }
 }

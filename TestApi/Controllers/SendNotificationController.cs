@@ -24,7 +24,7 @@ namespace TestApi.Controllers
         }
 
         [HttpPost(Name = "SendNotification")]
-        public async Task<IEnumerable<Guid>> Post()
+        public async Task<IEnumerable<Guid>> Post(CancellationToken cancellationToken)
         {
             var result = await _notificationPublisher.NotifyAsync(new NotificationMessage
             {
@@ -33,7 +33,7 @@ namespace TestApi.Controllers
                     new SmsMessageDto{ Body = "Hello Sms!", RecipientPhone = "921212121212" },
                     new EmailMessageDto { Body = "Hello Email!", RecipientEmail = "h93_b@gmail" }
                 }
-            });
+            }, cancellationToken);
 
             return result;
         }

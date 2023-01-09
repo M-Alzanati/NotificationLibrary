@@ -2,6 +2,6 @@
 {
     public interface IExecuteSubscription
     {
-        void DoSubscription(CancellationToken cancellationToken);
+        void DoSubscription(CancellationToken cancellationToken = default);
     }
 }

@@ -16,13 +16,16 @@ namespace Org.Notification.Subscription
             _workerInvoker = workerInvoker;
         }
 
-        public void DoSubscription(CancellationToken cancellationToken)
+        public void DoSubscription(CancellationToken cancellationToken = default)
         {
             foreach (var worker in _producerRegistry.GetWorkers())
             {
                 _messageProducer.DoSubscription(worker.Key, message =>
                 {
-                    _workerInvoker.Submit(worker.Value, message, cancellationToken);
+                    if (message != null)
+                    {
+                        _workerInvoker.SubmitAsync(worker.Value, message, cancellationToken);
+                    }
                 });
             }
         }

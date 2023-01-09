@@ -7,13 +7,24 @@ namespace Org.Notification.Subscription.Command
     {
         public virtual TMessage ParseMessage(object message)
         {
-            var objAsString = JsonSerializer.Serialize(message);
-            var obj = JsonSerializer.Deserialize<TMessage>(objAsString);
+            var obj = JsonSerializer.Deserialize<TMessage>(GetMessageAsString(message));
             return obj ?? throw new InvalidOperationException();
         }
 
-        public abstract Task ExecuteAsync(object message);
+        public string GetMessageAsString(object message)
+        {
+            return JsonSerializer.Serialize(message);
+        }
 
-        public abstract Task RedoAsync(object message);
+        public IMessageDto GetMessage(object message)
+        {
+            return ParseMessage(message);
+        }
+
+        public abstract Task ExecuteAsync(object message, CancellationToken cancellationToken);
+
+        public abstract Task RedoAsync(object message, CancellationToken cancellationToken);
+
+        public virtual string Name => typeof(TMessage).Name;
     }
 }

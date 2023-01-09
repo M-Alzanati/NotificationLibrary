@@ -2,6 +2,6 @@
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string? email, string? body);
+        Task SendEmailAsync(string? email, string? body, CancellationToken cancellationToken);
     }
 }

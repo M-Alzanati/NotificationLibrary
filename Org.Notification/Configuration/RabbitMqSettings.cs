@@ -1,6 +1,6 @@
-﻿namespace Org.Notification.Producer
+﻿namespace Org.Notification.Configuration
 {
-    public sealed class RabbitMqSettings
+    public record RabbitMqSettings
     {
         public string HostName { get; set; }
 

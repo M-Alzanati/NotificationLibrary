@@ -2,6 +2,6 @@
 {
     public interface ISmsService
     {
-        Task SendSmsAsync(string? mobile, string? body);
+        Task SendSmsAsync(string? mobile, string? body, CancellationToken cancellationToken);
     }
 }

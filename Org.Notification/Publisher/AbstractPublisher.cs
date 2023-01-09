@@ -25,10 +25,10 @@ namespace Org.Notification.Publisher
             return temp;
         }
 
-        public virtual async Task<IList<Guid>> NotifyAsync(NotificationMessage message)
+        public virtual async Task<IEnumerable<Guid>> NotifyAsync(NotificationMessage message, CancellationToken cancellationToken)
         {
             var messageDto = DecorateMessageDto(message);
-            await MessageProducer.SendMessageAsync(GetPublisherName(), messageDto ?? throw new InvalidOperationException());
+            await MessageProducer.SendMessageAsync(GetPublisherName(), messageDto ?? throw new InvalidOperationException(), cancellationToken);
             return new List<Guid> { message.Id };
         }
 
