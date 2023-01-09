@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Org.Notification\Org.Notification.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Org.Notification">
+      <HintPath>..\..\Org.Notification\Org.Notification\bin\Debug\net6.0\Org.Notification.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
