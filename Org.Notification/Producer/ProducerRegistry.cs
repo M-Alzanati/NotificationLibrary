@@ -16,31 +16,37 @@ namespace Org.Notification.Producer
             Workers = new ConcurrentDictionary<string, ICommand>();
         }
 
+        /// <inheritdoc cref="IProducerRegistry"/>
         public string GetPublisherName<TService>() where TService : IPublisher
         {
             return Publishers.SingleOrDefault(e => e.Value is TService).Key;
         }
 
+        /// <inheritdoc cref="IProducerRegistry"/>
         public string GetWorkerName<TService>() where TService : ICommand
         {
             return Workers.SingleOrDefault(e => e.Value is TService).Key;
         }
 
+        /// <inheritdoc cref="IProducerRegistry"/>
         public IPublisher GetPublisher<TService>() where TService : IPublisher
         {
             return Publishers.SingleOrDefault(e => e.Value is TService).Value;
         }
 
+        /// <inheritdoc cref="IProducerRegistry"/>
         public ICommand GetWorker<TService>() where TService : ICommand
         {
             return Workers.SingleOrDefault(e => e.Value is TService).Value;
         }
 
+        /// <inheritdoc cref="IProducerRegistry"/>
         public IEnumerable<KeyValuePair<string, ICommand>> GetWorkers()
         {
             return Workers;
         }
 
+        /// <inheritdoc cref="IProducerRegistry"/>
         public void RegisterProducer(IPublisher publisher, ICommand worker, string name, bool overrideDefault = false)
         {
             var uniqueId = Guid.NewGuid();
@@ -48,6 +54,7 @@ namespace Org.Notification.Producer
             Workers.TryAdd(overrideDefault ? $"{name}_{uniqueId}" : $"{name}", worker);
         }
 
+        /// <inheritdoc cref="IDisposable"/>
         public void Dispose()
         {
             Publishers.Clear();

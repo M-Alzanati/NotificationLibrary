@@ -23,7 +23,7 @@ namespace Org.Notification.Subscription.Command
             else
             {
                 // Means that we are done
-                // Also we can add more logic to redo the command if it was failing
+                // Also we can add more logic to retry failed commands
                 await DistributedCache.RemoveAsync(key, cancellationToken);
             }
         }

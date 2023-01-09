@@ -1,8 +1,13 @@
 ﻿using System.Text.Json;
+using Org.Notification.Message.Interface;
 using Org.Notification.Subscription.Base;
 
 namespace Org.Notification.Subscription.Command
 {
+    /// <summary>
+    /// Base for any command
+    /// </summary>
+    /// <typeparam name="TMessage"></typeparam>
     public abstract class AbstractCommand<TMessage> : ICommand where TMessage : class, IMessageDto
     {
         public virtual TMessage ParseMessage(object message)

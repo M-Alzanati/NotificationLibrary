@@ -3,6 +3,9 @@ using Org.Notification.Subscription.Base;
 
 namespace Org.Notification.Subscription
 {
+    /// <summary>
+    /// Do subscription part, we can extend this implementation to support more than message producer
+    /// </summary>
     public class ExecuteSubscription : IExecuteSubscription
     {
         private readonly IProducerRegistry _producerRegistry;
@@ -16,7 +19,7 @@ namespace Org.Notification.Subscription
             _workerInvoker = workerInvoker;
         }
 
-        public void DoSubscription(CancellationToken cancellationToken = default)
+        public virtual void DoSubscription(CancellationToken cancellationToken = default)
         {
             foreach (var worker in _producerRegistry.GetWorkers())
             {

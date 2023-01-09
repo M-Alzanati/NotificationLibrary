@@ -2,6 +2,9 @@
 
 namespace Org.Notification.Subscription.Command
 {
+    /// <summary>
+    /// Concrete implementation
+    /// </summary>
     public class EmailCommand : AbstractCommand<EmailMessageDto>
     {
         private readonly IEmailService _smsService;

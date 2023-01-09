@@ -1,4 +1,5 @@
 ﻿using Org.Notification.Core;
+using Org.Notification.Message.Interface;
 using Org.Notification.Producer.Interface;
 using Org.Notification.Publisher.Interface;
 
@@ -22,16 +23,26 @@ namespace Org.Notification.Publisher
             if (temp == null) return null;
 
             temp.Id = message.Id;
+            temp.At = DateTime.Now;
+
             return temp;
         }
 
+        /// <summary>
+        /// <inheritdoc cref="IPublisher"/>
+        /// </summary>
         public virtual async Task<IEnumerable<Guid>> NotifyAsync(NotificationMessage message, CancellationToken cancellationToken)
         {
             var messageDto = DecorateMessageDto(message);
-            await MessageProducer.SendMessageAsync(GetPublisherName(), messageDto ?? throw new InvalidOperationException(), cancellationToken);
+            if (messageDto == null) throw new InvalidOperationException();
+
+            await MessageProducer.SendMessageAsync(GetPublisherName(), messageDto, cancellationToken);
             return new List<Guid> { message.Id };
         }
 
+        /// <summary>
+        /// <inheritdoc cref="IPublisher"/>
+        /// </summary>
         public abstract string GetPublisherName();
     }
 }

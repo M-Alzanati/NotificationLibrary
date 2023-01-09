@@ -1,13 +1,28 @@
-﻿using Org.Notification.Core;
-
-namespace Org.Notification.Publisher.Interface
+﻿namespace Org.Notification.Publisher.Interface
 {
-    public interface INotificationPublisher : IPublisher
+    /// <summary>
+    /// Implementation for the publisher observable
+    /// </summary>
+    public interface INotificationsPublisher : IPublisher
     {
-        INotificationPublisher Subscribe<TService>() where TService : IPublisher;
+        /// <summary>
+        /// Add publisher to be observed
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <returns></returns>
+        INotificationsPublisher Subscribe<TService>() where TService : IPublisher;
 
-        INotificationPublisher UnSubscribe<TService>() where TService : IPublisher;
+        /// <summary>
+        /// Remove publisher to be observed
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <returns></returns>
+        INotificationsPublisher UnSubscribe<TService>() where TService : IPublisher;
 
-        INotificationPublisher UnSubscribeAll();
+        /// <summary>
+        /// Remove all publishers
+        /// </summary>
+        /// <returns></returns>
+        INotificationsPublisher UnSubscribeAll();
     }
 }
