@@ -1,3 +1,14 @@
+# Notification Library
+
+## Diagram
+This Diagram explain the architecture that this library follow.
+
+* Publisher and subscriber model
+![notification library](https://raw.githubusercontent.com/M-Alzanati/NotificationLibrary/main/digram.png)
+
+* Cache the message if it was sent before
+![notification library](https://raw.githubusercontent.com/M-Alzanati/NotificationLibrary/main/caching.webp)
+
 ### Basic Usage
 ```csharp
 // Register service with dependent services
