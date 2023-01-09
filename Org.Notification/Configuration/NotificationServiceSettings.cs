@@ -40,7 +40,7 @@ namespace Org.Notification.Configuration
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection WithSubscription(this IServiceCollection serviceCollection)
+        public static IServiceCollection WithWorkers(this IServiceCollection serviceCollection)
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var worker = serviceProvider.GetRequiredService<IExecuteSubscription>();
