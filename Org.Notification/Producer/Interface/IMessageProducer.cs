@@ -28,6 +28,6 @@
         /// </summary>
         /// <param name="collectionName"></param>
         /// <param name="callback"></param>
-        void DoSubscription(string collectionName, Action<object?> callback);
+        void DoSubscription(string collectionName, Func<object?, Task> callback);
     }
 }

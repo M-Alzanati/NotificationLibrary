@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Org.Notification.Producer;
 using Org.Notification.Producer.Interface;
 using Org.Notification.Publisher;
@@ -9,6 +10,7 @@ using Org.Notification.Service.Interface;
 using Org.Notification.Subscription;
 using Org.Notification.Subscription.Base;
 using Org.Notification.Subscription.Command;
+using StackExchange.Redis;
 
 namespace Org.Notification.Configuration
 {
@@ -74,8 +76,8 @@ namespace Org.Notification.Configuration
 
             serviceCollection.AddStackExchangeRedisCache(options =>
             {
-                var redisSettings = configuration.Get<RedisCacheSettings>();
-                options.Configuration = $"{redisSettings?.HostName ?? "localhost"}:{redisSettings?.Port ?? 6793}";
+                var redisSettings = serviceCollection.BuildServiceProvider().GetService<IOptions<RedisCacheSettings>>()?.Value;
+                options.Configuration = $"{redisSettings?.HostName ?? "localhost"}:{redisSettings?.Port ?? 6379}";
                 options.InstanceName = redisSettings?.InstanceName ?? string.Empty;
             });
 

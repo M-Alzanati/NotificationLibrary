@@ -14,17 +14,27 @@ namespace Org.Notification.Subscription.Command
 
         public virtual async Task SubmitAsync(ICommand command, object message, CancellationToken cancellationToken)
         {
-            var key = HashMessageKey(command, message);
-            if (string.IsNullOrEmpty(await DistributedCache.GetStringAsync(key, cancellationToken)))
+            try
             {
-                await DistributedCache.SetStringAsync(key, command.GetMessageAsString(message), token: cancellationToken);
-                await command.ExecuteAsync(message, cancellationToken);
+                var key = HashMessageKey(command, message);
+                var redisKey = await DistributedCache.GetStringAsync(key, cancellationToken);
+
+                if (string.IsNullOrEmpty(redisKey))
+                {
+                    await DistributedCache.SetStringAsync(key, command.GetMessageAsString(message), token: cancellationToken);
+                    await command.ExecuteAsync(message, cancellationToken);
+                }
+                else
+                {
+                    // Means that we are done
+                    // Also we can add more logic to retry failed commands
+                    await DistributedCache.RemoveAsync(key, cancellationToken);
+                }
             }
-            else
+            catch (Exception e)
             {
-                // Means that we are done
-                // Also we can add more logic to retry failed commands
-                await DistributedCache.RemoveAsync(key, cancellationToken);
+                Console.WriteLine(e);
+                throw;
             }
         }
 

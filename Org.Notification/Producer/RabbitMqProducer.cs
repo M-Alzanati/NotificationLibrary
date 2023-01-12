@@ -45,7 +45,7 @@ namespace Org.Notification.Producer
         }
 
         /// <inheritdoc cref="IMessageProducer"/>
-        public void DoSubscription(string collectionName, Action<object?> callback)
+        public void DoSubscription(string collectionName, Func<object?, Task> callback)
         {
             CreateMessageCollectionIfNotExist(collectionName);
 
