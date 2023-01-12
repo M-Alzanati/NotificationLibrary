@@ -27,14 +27,14 @@ Something(INotificationsPublisher notificationPublisher)
 ```
 
 ```csharp
-// Regsiter all required publishers
+// Add required publishers at runtime
 notificationPublisher
     .Subscribe<SmsPublisher>()
     .Subscribe<EmailPublisher>();
 ```
 
 ```csharp
-// Notify all registered publishers
+// Notify all publishers
 var message = new NotificationMessage
 {
     DetailMessage =
@@ -45,7 +45,7 @@ var message = new NotificationMessage
     }
 };
 
-await _notificationPublisher.NotifyAsync(message);
+await notificationPublisher.NotifyAsync(message);
 ```
 
 ### Adding custom publisher and worker
